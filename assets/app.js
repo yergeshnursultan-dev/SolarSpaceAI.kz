@@ -2113,6 +2113,8 @@ function _getQuickStats(){
 
 const AI_ENABLED = true;
 
+const PROXY_URL = "https://solar-ai-proxy.vercel.app/api/chat";
+
 function initAI(){
   const body = document.getElementById("aiChatBody");
   if(body && body.children.length===0){
@@ -2186,11 +2188,41 @@ function initAI(){
     setMode("mode: connecting…");
     setMetrics(null);
 
-    const local = aiAnswer(q);
-    setMode('mode: offline');
-    setMetrics(null);
-    if(bubble) bubble.innerHTML = local;
-    else addChat('assistant', local);
+    // 1) алдымен offline жауап (сайт бос қалмасын)
+const local = aiAnswer(q);
+setMode('mode: offline');
+setMetrics(null);
+if (bubble) bubble.innerHTML = local;
+else addChat('assistant', local);
+
+// 2) online (proxy) қосулы болса — үстінен ChatGPT жауаппен жаңартамыз
+try {
+  setMode("mode: online");
+  const fileText = window.__aiDoc?.text || "";
+
+  const res = await fetch(PROXY_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ prompt: q, fileText })
+  });
+
+  const data = await res.json();
+
+  // егер quota/қате болса — offline қалсын да, хабарлама жазсын
+  if (!data?.text || String(data.text).includes("insufficient_quota")) {
+    addChat("assistant", "⚠️ Online AI үшін OpenAI квота/баланс керек. Қазір offline жауап көрсетілді.");
+    setMode("mode: offline");
+    return;
+  }
+
+  // online жауапты көрсетеміз
+  const onlineText = String(data.text);
+  if (bubble) bubble.innerHTML = _asHtmlLines(onlineText);
+  else addChat("assistant", _asHtmlLines(onlineText));
+} catch (e) {
+  addChat("assistant", "⚠️ Proxy байланысы шықпады. Offline жауап көрсетілді.");
+  setMode("mode: offline");
+}
   };
 
   send?.addEventListener("click", sendNow);
