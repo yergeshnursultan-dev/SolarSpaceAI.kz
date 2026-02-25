@@ -1922,11 +1922,11 @@ function buildLongForecast(yearsAhead=30){
   const regM = _linReg(years, avgM);
   const regKE = _linReg(years, avgKE);
 
-  const ampM = _std(avgM) * 0.25;   // цикл амплитудасы (шамамен)
+  const ampM = _std(avgM) * 0.25;   
   const ampKE = _std(avgKE) * 0.25;
-  const w = 2*Math.PI/11; // 11 жылдық Күн циклі
+  const w = 2*Math.PI/11; 
 
-  // Map actual annual averages onto full range
+  
   const actualMMap = new Map();
   const actualKEMap = new Map();
   for(let i=0;i<years.length;i++){
@@ -2111,7 +2111,7 @@ function _getQuickStats(){
   };
 }
 
-const AI_ENABLED = false; // уақытша: OpenAI Billing қосқанда true қыл
+const AI_ENABLED = true;
 
 function initAI(){
   const body = document.getElementById("aiChatBody");
