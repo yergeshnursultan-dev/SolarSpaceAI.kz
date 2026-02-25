@@ -1,1 +1,0 @@
-# SolarSpaceAI.kz
