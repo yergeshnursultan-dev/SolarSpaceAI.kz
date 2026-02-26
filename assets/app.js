@@ -1,6 +1,6 @@
-// =====================================================
+
   // 0) Reveal on scroll
-  // =====================================================
+  
   const revealEls = Array.from(document.querySelectorAll(".reveal"));
   const io = new IntersectionObserver((entries)=> {
     for(const e of entries){
@@ -9,9 +9,8 @@
   }, {threshold: .12});
   revealEls.forEach(el=>io.observe(el));
 
-  // =====================================================
-  // 0b) Section background switch (әр блок басталғанда фон ауысады)
-  // =====================================================
+  // 0b) Section background switch 
+ 
   const bgA = document.getElementById('bgA');
   const bgB = document.getElementById('bgB');
   let bgFlip = false;
@@ -49,9 +48,9 @@
   bgTargets.forEach(el=>bgIO.observe(el));
 
 
-  // =====================================================
+ 
   // 1) Status helper
-  // =====================================================
+  
   const statusMessage = document.getElementById("statusMessage");
   const statusText = document.getElementById("statusText");
   const statusDot = document.getElementById("statusDot");
@@ -62,9 +61,9 @@
     statusDot.className = "dot " + (type==="ready" ? "ok" : type==="loading" ? "warn" : type==="error" ? "" : "");
   }
 
-  // =====================================================
+  
   // 1b) Forecast status helper
-  // =====================================================
+ 
   const forecastStatus = document.getElementById("forecastStatus");
   const forecastStatusText = document.getElementById("forecastStatusText");
   function setForecastStatus(type, text){
@@ -76,9 +75,9 @@
     forecastStatusText.textContent = text;
   }
 
-  // =====================================================
+  
   // 1c) MiniChart fallback (Chart.js жоқ болса да графиктер шықсын)
-  // =====================================================
+
   function hasChartJS(){
     return (typeof window.Chart === "function");
   }
@@ -378,16 +377,15 @@
   }
 
   function createChart(target, cfg){
-    // Chart.js болса — соны қолданамыз, болмаса MiniChart
+    // Chart.js 
     if(hasChartJS()){
       return new Chart(target, cfg);
     }
     return MiniChart(target, cfg);
   }
 
-  // =====================================================
-  // 2) Data stores (SME + X_CME)
-  // =====================================================
+  // 2) Data stores
+  
   let Date_god=[], Mass=[], KE=[], Speed=[], MassDev=[];
   let maxM=0, maxKE=0, maxV=0;
   let meanM=0, meanKE=0, stdM=0, stdKE=0;
@@ -407,9 +405,9 @@
   let regionPoints=[];
   let delayPoints=[];
 
-  // =====================================================
+ 
   // 3) SME load
-  // =====================================================
+
   function loadData(){
     const smeFile = document.getElementById("fileInput").files[0];
     const xcmeFile = document.getElementById("xCmeInput").files[0];
@@ -590,9 +588,9 @@
     }
   }
 
-  // =====================================================
+  
   // 4) Summary
-  // =====================================================
+  
   function updateAnimationSummary(){
     const resultsDiv = document.getElementById("results");
     resultsDiv.innerHTML="";
@@ -628,9 +626,9 @@
     }
   }
 
-  // =====================================================
+
   // 5) Sun animation
-  // =====================================================
+  
   function getSunRegion(m, ke, v){
     if(m > meanM + 2*stdM) return "Корона (CME белсенді)";
     if(ke > meanKE + 2*stdKE) return "Жарқ ету / flare аймағы";
@@ -675,9 +673,9 @@
     document.getElementById("flare").style.background="radial-gradient(circle, rgba(248,113,113,0.0), transparent 70%)";
   }
 
-  // =====================================================
+ 
   // 6) Charts
-  // =====================================================
+ 
   function destroyIfExists(ch){ if(ch && typeof ch.destroy==="function") ch.destroy(); }
 
 
@@ -962,9 +960,9 @@
     }
   }
 
-  // =====================================================
+  
   // 7) Region summary
-  // =====================================================
+
   function updateRegionSummary(){
     const div=document.getElementById("spikeSummary");
     if(!div) return;
@@ -1000,9 +998,9 @@
     `;
   }
 
-  // =====================================================
+  
   // 8) Calculator
-  // =====================================================
+  
   function calcMass(){
     const E=parseFloat(document.getElementById("calcE").value);
     const v_km=parseFloat(document.getElementById("calcV").value);
@@ -1017,9 +1015,9 @@
     updateForecastText();
   }
 
-  // =====================================================
+  
   // 9) AI Forecast (from loaded data) + Solar AI Q&A
-  // =====================================================
+  
   function updateForecastText(){
     const metricsRow=document.getElementById("aiMetricsRow");
     const modeChip=document.getElementById("aiModeChip");
@@ -1079,9 +1077,9 @@
     addChat("assistant", txt);
   }
 
-// =====================================================
+
 // 10) Геолокация + "Келесі вспышка" таймері (sunrise-based)
-// =====================================================
+
 let currentLoc = null;
 
 const sunriseStatus = document.getElementById("sunriseStatus");
@@ -1297,9 +1295,9 @@ setInterval(()=>{ try{ tickSunrise(); } catch(e){} }, 1000);
 // Әдепкі локация (Алматы) — геолокация істемесе де UI жұмыс істейді
 applyLocation(43.2389, 76.8897, "Almaty");
 
-  // =====================================================
+ 
   // 14) Reset
-  // =====================================================
+
   function resetAll(){
     pause(); resetAnim();
     Date_god=[];Mass=[];KE=[];Speed=[];MassDev=[];
@@ -1330,9 +1328,9 @@ applyLocation(43.2389, 76.8897, "Almaty");
   }
 
 
-  // =====================================================
+ 
   // 12) Built-in TXT loader (data folder)
-  // =====================================================
+
   async function loadBuiltIn(){
     try{
       setStatus("loading","Дайын TXT жүктелуде...");
@@ -1412,9 +1410,9 @@ applyLocation(43.2389, 76.8897, "Almaty");
   }
   window.loadBuiltIn = loadBuiltIn;
 
-  // =====================================================
+  
   // 13) Manual add (SME + X_CME)
-  // =====================================================
+ 
   const manualBtn = document.getElementById("btnToggleManual");
   const manualWrap = document.getElementById("manualWrap");
   manualBtn?.addEventListener("click", ()=>{
@@ -1514,17 +1512,17 @@ applyLocation(43.2389, 76.8897, "Almaty");
 
 
 
-// =====================================================
-// 11) Plot wrapper (кей жерлерде plotAll деп шақырылады)
-// =====================================================
+
+// 11) Plot wrapper 
+
 function plotAll(){
   plotCoreCharts();
   plotDelayAndRegionCharts();
 }
 
-// =====================================================
-// 12) Болжам: Flare тәуекелі + CME қауіптілігі (2030/2035/2040)
-// =====================================================
+
+// 12) Болжам: 
+
 function _linReg(xs, ys){
   const n = Math.min(xs.length, ys.length);
   if(n<2) return {a:0,b:ys[0]||0}; // y = a*x + b
@@ -1545,9 +1543,9 @@ function build10YearForecast(){
   const c2 = document.getElementById('chartForecast10KE');
   if(!c1 || !c2) return;
 
-  // ------------------------------
+  
   // Target end year (absolute)
-  // ------------------------------
+  
   const targetYear = Number(window.__forecastTargetYear || 2030);
 
   // Helpers
@@ -1615,9 +1613,9 @@ function build10YearForecast(){
     ];
   };
 
-  // ---------------------------------
+ 
   // 1) Flare risk (X_CME → annual count)
-  // ---------------------------------
+
   const flareByYear = new Map();
   if(Array.isArray(XCMEEventTimes)){
     for(const t of XCMEEventTimes){
@@ -1629,9 +1627,9 @@ function build10YearForecast(){
   const flareYears = Array.from(flareByYear.keys()).sort((a,b)=>a-b);
   const flareLast = flareYears.length ? flareYears[flareYears.length-1] : null;
 
-  // ---------------------------------
+
   // 2) CME hazard (SME → annual medians of log10(Ekin) and v)
-  // ---------------------------------
+ 
   const keByYear = new Map();
   const vByYear  = new Map();
   if(Array.isArray(SMEEventTimes) && SMEEventTimes.length===KE.length && SMEEventTimes.length===Speed.length){
@@ -1654,9 +1652,9 @@ function build10YearForecast(){
   const cmeYears = Array.from(new Set([...keByYear.keys(), ...vByYear.keys()])).sort((a,b)=>a-b);
   const cmeLast = cmeYears.length ? cmeYears[cmeYears.length-1] : null;
 
-  // ------------------------------
+
   // Display range (last 30y window)
-  // ------------------------------
+
   const minDataYear = Math.min(
     flareYears.length? flareYears[0] : 9999,
     cmeYears.length? cmeYears[0] : 9999
@@ -1670,9 +1668,9 @@ function build10YearForecast(){
   const years = [];
   for(let y=startYear; y<=endYear; y++) years.push(y);
 
-  // ------------------------------
+
   // Fit flare model (log(count+1))
-  // ------------------------------
+ 
   let flareModel = null;
   const flareHist = years.map(y => (flareByYear.get(y) ?? null));
   const flareF = years.map(_=>null);
@@ -1704,9 +1702,9 @@ function build10YearForecast(){
     }
   }
 
-  // ------------------------------
+ 
   // Fit CME models (annual medians)
-  // ------------------------------
+ 
   const keMed = new Map();
   const vMed  = new Map();
   for(const y of cmeYears){
@@ -1775,9 +1773,9 @@ function build10YearForecast(){
     cme:   {lastYear: cmeLast,  keHist, keF, keLo, keHi, vHist, vF, vLo, vHi}
   };
 
-  // ------------------------------
+  
   // Render charts
-  // ------------------------------
+ 
   destroyIfExists(chartForecast10);
   destroyIfExists(chartForecast10KE);
 
@@ -1977,9 +1975,9 @@ function buildLongForecast(yearsAhead=30){
   }
 }
 
-// =====================================================
+
 // 13) Solar AI chat (ChatGPT стилі)
-// =====================================================
+
 function addChat(role, html){
   const body = document.getElementById("aiChatBody");
   if(!body) return null;
@@ -2386,9 +2384,9 @@ document.getElementById("btnPlan")?.addEventListener("click", async ()=>{
   }
 });
 
-// =====================================================
+
 // 15) Тапсырыс модалі (жөнелту жоқ — тек көрсетеді)
-// =====================================================
+
 const modal = document.getElementById("modal");
 const btnOrder = document.getElementById("btnOrder");
 const btnClose = document.getElementById("btnClose");
@@ -2447,11 +2445,9 @@ btnClearOrder?.addEventListener("click", ()=>{
   if(pre) pre.textContent = "{ }";
 });
 
-// =====================================================
+
 // Auto-load built-in TXT on first open
-// =====================================================
-// Сайт ашылғанда public/data ішіндегі дайын TXT автоматты түрде оқылады.
-// Егер дерек already loaded болса — қайталамайды.
+
 window.addEventListener("load", ()=>{
   setTimeout(()=>{
     try{
